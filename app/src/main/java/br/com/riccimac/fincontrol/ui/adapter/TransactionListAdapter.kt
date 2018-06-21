@@ -16,35 +16,60 @@ import br.com.riccimac.fincontrol.model.Type
 import kotlinx.android.synthetic.main.transaction_item.view.*
 import java.text.SimpleDateFormat
 
-class TransactionListAdapter(transactions: List<Transaction>,
-                             context: Context) : BaseAdapter() {
-
-    private val transactions = transactions
-    private val context = context
+class TransactionListAdapter(private val transactions: List<Transaction>,
+                             private val context: Context) : BaseAdapter() {
 
     private val LABEL_LENGTH = 14
 
-    @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
-        val viewItem = LayoutInflater.from(context).inflate(R.layout.transaction_item, parent, false)
+        val viewItem = LayoutInflater.from(context).
+                                                    inflate(R.layout.transaction_item,
+                                                            parent,
+                                                            false)
 
         val transaction = transactions[position]
 
-        viewItem.transaction_value.text = transaction.value.formatToBrazillianCurrency()
-        viewItem.transaction_category.text = transaction.category.limitUntil(LABEL_LENGTH)
-        viewItem.transaction_date.text = transaction.date.formatToBrazillianStandard()
-
-        if(transaction.type == Type.OUTCOME){
-            viewItem.transaction_value.setTextColor(ContextCompat.getColor(context, R.color.outcome))
-            viewItem.transaction_icon.setBackgroundResource(R.drawable.icon_transaction_outcome)
-        }else{
-            viewItem.transaction_value.setTextColor(ContextCompat.getColor(context, R.color.income))
-            viewItem.transaction_icon.setBackgroundResource(R.drawable.icon_transaction_income)
-        }
-
-
+        addValue(viewItem, transaction)
+        addCategory(viewItem, transaction)
+        addDate(viewItem, transaction)
+        addIcon(transaction, viewItem)
 
         return viewItem
+    }
+
+    private fun addValue(viewItem: View, transaction: Transaction) {
+        val color : Int = colorBy(transaction.type)
+        viewItem.transaction_value.setTextColor(color)
+        viewItem.transaction_value.text = transaction.value.formatToBrazillianCurrency()
+    }
+
+    private fun addCategory(viewItem: View, transaction: Transaction) {
+        viewItem.transaction_category.text = transaction.category.limitUntil(LABEL_LENGTH)
+    }
+
+    private fun addDate(viewItem: View, transaction: Transaction) {
+        viewItem.transaction_date.text = transaction.date.formatToBrazillianStandard()
+    }
+
+    private fun addIcon(transaction: Transaction, viewItem: View) {
+        val icon : Int = iconBy(transaction)
+        viewItem.transaction_icon.setBackgroundResource(icon)
+    }
+
+    private fun colorBy(type: Type): Int {
+        if (type == Type.OUTCOME) {
+           return ContextCompat.getColor(context, R.color.outcome)
+        }
+
+        return ContextCompat.getColor(context, R.color.income)
+    }
+
+    private fun iconBy(transaction: Transaction): Int {
+        if (transaction.type == Type.OUTCOME) {
+            return R.drawable.icon_transaction_outcome
+        }
+
+        return R.drawable.icon_transaction_income
     }
 
     override fun getItem(position: Int): Transaction {

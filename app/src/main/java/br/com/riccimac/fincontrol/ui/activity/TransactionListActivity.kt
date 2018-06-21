@@ -15,13 +15,21 @@ class TransactionListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction_list)
 
-        val transactions = listOf(
-                Transaction( value = BigDecimal(20.5), category = "Almoço com a equipe", type = Type.OUTCOME),
-                Transaction( value = BigDecimal(101), type = Type.INCOME),
-                Transaction( value = BigDecimal(400), category = "Passagem", type = Type.OUTCOME),
-                Transaction( value = BigDecimal(50), category = "Presente" ,type = Type.INCOME)
-                )
+        val transactions = mockTransactions()
 
-        lista_transacoes_listview.adapter = TransactionListAdapter(transactions,this)
+        configureList(transactions)
+    }
+
+    private fun mockTransactions(): List<Transaction> {
+        return listOf(
+                Transaction(value = BigDecimal(20.5), category = "Almoço com a equipe", type = Type.OUTCOME),
+                Transaction(value = BigDecimal(101), type = Type.INCOME),
+                Transaction(value = BigDecimal(400), category = "Passagem", type = Type.OUTCOME),
+                Transaction(value = BigDecimal(50), category = "Presente", type = Type.INCOME)
+        )
+    }
+
+    private fun configureList(transactions: List<Transaction>) {
+        lista_transacoes_listview.adapter = TransactionListAdapter(transactions, this)
     }
 }
