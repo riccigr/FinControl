@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="categorias_de_receita">
+    <string-array name="category_income">
         <item>Receita indefinida</item>
         <item>Economias</item>
         <item>Empréstimo</item>
@@ -9,7 +9,7 @@
         <item>Salário</item>
         <item>Vendas</item>
     </string-array>
-    <string-array name="categorias_de_despesa">
+    <string-array name="category_outcome">
         <item>Despesa indefinida</item>
         <item>Casa</item>
         <item>Comida</item>
@@ -21,7 +21,7 @@
         <item>Supermercado</item>
         <item>Transporte</item>
     </string-array>
-    <string-array name="meses">
+    <string-array name="months">
         <item>Janeiro</item>
         <item>Fevereiro</item>
         <item>Março</item>

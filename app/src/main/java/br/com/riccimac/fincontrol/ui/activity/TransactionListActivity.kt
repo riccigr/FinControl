@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import br.com.riccimac.fincontrol.R
 import br.com.riccimac.fincontrol.model.Transaction
+import br.com.riccimac.fincontrol.model.Type
 import br.com.riccimac.fincontrol.ui.adapter.TransactionListAdapter
-import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import kotlinx.android.synthetic.main.activity_transaction_list.*
 import java.math.BigDecimal
-import java.util.*
 
 class TransactionListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lista_transacoes)
+        setContentView(R.layout.activity_transaction_list)
 
         val transactions = listOf(
-                Transaction( BigDecimal(20.5), "Meal", Calendar.getInstance()),
-                Transaction( BigDecimal(101), "Economies", Calendar.getInstance())
+                Transaction( value = BigDecimal(20.5), category = "Almoço", type = Type.OUTCOME),
+                Transaction( value = BigDecimal(101), type = Type.INCOME),
+                Transaction( value = BigDecimal(400), category = "Passagem", type = Type.OUTCOME),
+                Transaction( value = BigDecimal(50), category = "Presente" ,type = Type.INCOME)
                 )
 
         lista_transacoes_listview.adapter = TransactionListAdapter(transactions,this)

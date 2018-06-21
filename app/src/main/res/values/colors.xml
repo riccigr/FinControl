@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#256c13</color>
     <color name="colorAccent">#367C25</color>
     <color name="colorBackground">#C1C1C1</color>
-    <color name="receita">#607890</color>
-    <color name="despesa">#B22318</color>
+    <color name="income">#607890</color>
+    <color name="outcome">#B22318</color>
 </resources>

@@ -2,13 +2,17 @@ package br.com.riccimac.fincontrol.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import br.com.riccimac.fincontrol.R
+import br.com.riccimac.fincontrol.extensions.formatToBrazillianCurrency
+import br.com.riccimac.fincontrol.extensions.formatToBrazillianStandard
 import br.com.riccimac.fincontrol.model.Transaction
-import kotlinx.android.synthetic.main.transacao_item.view.*
+import br.com.riccimac.fincontrol.model.Type
+import kotlinx.android.synthetic.main.transaction_item.view.*
 import java.text.SimpleDateFormat
 
 class TransactionListAdapter(transactions: List<Transaction>,
@@ -19,14 +23,23 @@ class TransactionListAdapter(transactions: List<Transaction>,
 
     @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
-        val viewItem = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
+        val viewItem = LayoutInflater.from(context).inflate(R.layout.transaction_item, parent, false)
 
         val transaction = transactions[position]
-        val formatedDate = SimpleDateFormat("dd/MM/yyyy").format(transaction.date.time)
 
-        viewItem.transacao_valor.text = transaction.value.toString()
-        viewItem.transacao_categoria.text = transaction.category
-        viewItem.transacao_data.text = formatedDate
+        viewItem.transaction_value.text = transaction.value.formatToBrazillianCurrency()
+        viewItem.transaction_category.text = transaction.category
+        viewItem.transaction_date.text = transaction.date.formatToBrazillianStandard()
+
+        if(transaction.type == Type.OUTCOME){
+            viewItem.transaction_value.setTextColor(ContextCompat.getColor(context, R.color.outcome))
+            viewItem.transaction_icon.setBackgroundResource(R.drawable.icon_transaction_outcome)
+        }else{
+            viewItem.transaction_value.setTextColor(ContextCompat.getColor(context, R.color.income))
+            viewItem.transaction_icon.setBackgroundResource(R.drawable.icon_transaction_income)
+        }
+
+
 
         return viewItem
     }
