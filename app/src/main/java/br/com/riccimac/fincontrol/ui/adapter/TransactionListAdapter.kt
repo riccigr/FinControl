@@ -10,6 +10,7 @@ import android.widget.BaseAdapter
 import br.com.riccimac.fincontrol.R
 import br.com.riccimac.fincontrol.extensions.formatToBrazillianCurrency
 import br.com.riccimac.fincontrol.extensions.formatToBrazillianStandard
+import br.com.riccimac.fincontrol.extensions.limitUntil
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import kotlinx.android.synthetic.main.transaction_item.view.*
@@ -21,6 +22,8 @@ class TransactionListAdapter(transactions: List<Transaction>,
     private val transactions = transactions
     private val context = context
 
+    private val LABEL_LENGTH = 14
+
     @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
         val viewItem = LayoutInflater.from(context).inflate(R.layout.transaction_item, parent, false)
@@ -28,7 +31,7 @@ class TransactionListAdapter(transactions: List<Transaction>,
         val transaction = transactions[position]
 
         viewItem.transaction_value.text = transaction.value.formatToBrazillianCurrency()
-        viewItem.transaction_category.text = transaction.category
+        viewItem.transaction_category.text = transaction.category.limitUntil(LABEL_LENGTH)
         viewItem.transaction_date.text = transaction.date.formatToBrazillianStandard()
 
         if(transaction.type == Type.OUTCOME){
