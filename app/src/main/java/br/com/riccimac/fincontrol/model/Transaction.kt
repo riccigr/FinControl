@@ -6,4 +6,4 @@ import java.util.*
 class Transaction (val value: BigDecimal,
                    val category: String = "Undefined",
                    val type: Type,
-                   val date: Calendar = Calendar.getInstance())
+                   val createDate: Calendar = Calendar.getInstance())

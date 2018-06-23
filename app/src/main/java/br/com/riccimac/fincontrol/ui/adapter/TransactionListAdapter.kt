@@ -1,6 +1,5 @@
 package br.com.riccimac.fincontrol.ui.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import br.com.riccimac.fincontrol.extensions.limitUntil
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import kotlinx.android.synthetic.main.transaction_item.view.*
-import java.text.SimpleDateFormat
 
 class TransactionListAdapter(private val transactions: List<Transaction>,
                              private val context: Context) : BaseAdapter() {
@@ -31,7 +29,7 @@ class TransactionListAdapter(private val transactions: List<Transaction>,
 
         addValue(viewItem, transaction)
         addCategory(viewItem, transaction)
-        addDate(viewItem, transaction)
+        addCreateDate(viewItem, transaction)
         addIcon(transaction, viewItem)
 
         return viewItem
@@ -47,8 +45,8 @@ class TransactionListAdapter(private val transactions: List<Transaction>,
         viewItem.transaction_category.text = transaction.category.limitUntil(LABEL_LENGTH)
     }
 
-    private fun addDate(viewItem: View, transaction: Transaction) {
-        viewItem.transaction_date.text = transaction.date.formatToBrazillianStandard()
+    private fun addCreateDate(viewItem: View, transaction: Transaction) {
+        viewItem.transaction_date.text = transaction.createDate.formatToBrazillianStandard()
     }
 
     private fun addIcon(transaction: Transaction, viewItem: View) {
