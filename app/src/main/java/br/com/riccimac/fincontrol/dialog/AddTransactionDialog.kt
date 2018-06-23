@@ -21,27 +21,67 @@ import java.util.Calendar
 class AddTransactionDialog(private val context: Context,
                            private val viewGroup: ViewGroup) {
 
-    private val alertView = createLayout()
+    private val view = createLayout()
 
-    fun configureDialog(ITransactionDelegate: ITransactionDelegate) {
+    private val dateField = view.form_transaction_date
+    private val categoryField = view.form_transaction_category
+    private val valueField = view.form_transaction_value
+
+    fun configure(type: Type, ITransactionDelegate: ITransactionDelegate) {
         configureCreateDate()
-        configureCategory()
-        configureForm(ITransactionDelegate)
+        configureCategory(type)
+        configureForm(type, ITransactionDelegate)
     }
 
-    private fun configureForm(ITransactionDelegate: ITransactionDelegate) {
+    private fun configureCreateDate() {
+        val today = Calendar.getInstance()
+
+        val year = today.get(Calendar.YEAR)
+        val month = today.get(Calendar.MONTH)
+        val day = today.get(Calendar.DAY_OF_MONTH)
+
+        dateField.setText(today.formatToBrazillianStandard())
+
+        dateField.setOnClickListener {
+            DatePickerDialog(context,
+                    { _, year, month, day ->
+                        val dateSelected = Calendar.getInstance()
+                        dateSelected.set(year, month, day)
+                        dateField.setText(dateSelected.formatToBrazillianStandard())
+                    },
+                    year, month, day
+            ).show()
+        }
+    }
+
+    private fun configureCategory(type: Type) {
+
+        val categoryList = categoryBy(type)
+
+        val adapterCategory = ArrayAdapter.createFromResource(
+                context,
+                categoryList,
+                android.R.layout.simple_spinner_dropdown_item)
+
+        categoryField.adapter = adapterCategory
+    }
+
+    private fun configureForm(type: Type, ITransactionDelegate: ITransactionDelegate) {
+
+        val title = titleBy(type)
+
         AlertDialog.Builder(context)
-                .setTitle(R.string.add_income)
-                .setView(alertView)
-                .setPositiveButton("Adicionar") { _, _ ->
-                    val textValue = alertView.form_transaction_value.text.toString()
-                    val textDate = alertView.form_transaction_date.text.toString()
-                    val textCategory = alertView.form_transaction_category.selectedItem.toString()
+                .setTitle(title)
+                .setView(view)
+                .setPositiveButton("Adicionar") { _ , _ ->
+                    val textValue = valueField.text.toString()
+                    val textDate = dateField.text.toString()
+                    val textCategory = categoryField.selectedItem.toString()
 
                     val value = convertToBigDecimal(textValue)
                     val date = textDate.parseToCalendar()
 
-                    val transaction = Transaction(type = Type.INCOME,
+                    val transaction = Transaction(type = type,
                             value = value,
                             createDate = date,
                             category = textCategory)
@@ -53,52 +93,35 @@ class AddTransactionDialog(private val context: Context,
                 .show()
     }
 
-    private fun configureCategory() {
-        val adapterCategory = ArrayAdapter.createFromResource(
-                context,
-                R.array.category_income,
-                android.R.layout.simple_spinner_dropdown_item)
-
-        alertView.form_transaction_category.adapter = adapterCategory
-    }
-
-    private fun configureCreateDate() {
-        val today = Calendar.getInstance()
-
-        val year = today.get(Calendar.YEAR)
-        val month = today.get(Calendar.MONTH)
-        val day = today.get(Calendar.DAY_OF_MONTH)
-
-        alertView.form_transaction_date.setText(today.formatToBrazillianStandard())
-
-        alertView.form_transaction_date.setOnClickListener {
-            DatePickerDialog(context,
-                    DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                        val dateSelected = Calendar.getInstance()
-                        dateSelected.set(year, month, day)
-                        alertView.form_transaction_date.setText(dateSelected.formatToBrazillianStandard())
-                    },
-                    year, month, day
-            ).show()
-        }
-    }
-
     private fun createLayout(): View {
-        return LayoutInflater.from(context)
-                .inflate(R.layout.form_transaction,
-                        viewGroup,
-                        false)
+        return LayoutInflater
+                .from(context)
+                .inflate(R.layout.form_transaction,viewGroup,false)
     }
 
     private fun convertToBigDecimal(textValue: String): BigDecimal {
         return try {
-            BigDecimal(textValue)
-        } catch (ex: NumberFormatException) {
-            Toast.makeText(context,
-                    "Falha na Conversão de valores",
-                    Toast.LENGTH_LONG
-            ).show()
-            BigDecimal.ZERO
+                    BigDecimal(textValue)
+                } catch (ex: NumberFormatException) {
+                    Toast.makeText(context,
+                            "Falha na Conversão de valores",
+                            Toast.LENGTH_LONG
+                    ).show()
+                    BigDecimal.ZERO
+                }
+    }
+
+    private fun titleBy(type: Type): Int {
+        if (type == Type.INCOME) {
+            return R.string.add_income
         }
+        return  R.string.add_outcome
+    }
+
+    private fun categoryBy(type: Type): Int {
+        if (type == Type.INCOME) {
+            return R.array.category_income
+        }
+        return R.array.category_outcome
     }
 }

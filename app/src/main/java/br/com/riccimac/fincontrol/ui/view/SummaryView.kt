@@ -18,6 +18,12 @@ class SummaryView(private val context: Context,
     private val colorIncome : Int = ContextCompat.getColor(context, R.color.income)
     private val colorOutcome : Int = ContextCompat.getColor(context, R.color.outcome)
 
+    fun update() {
+        addIncome()
+        addOutcome()
+        addTotal()
+    }
+
     private fun addIncome() {
         val totalIncome = summary.income
 
@@ -52,13 +58,6 @@ class SummaryView(private val context: Context,
         if (value >= BigDecimal.ZERO) {
            return ContextCompat.getColor(context, R.color.income)
         }
-
         return ContextCompat.getColor(context, R.color.outcome)
-    }
-
-    fun update() {
-        addIncome()
-        addOutcome()
-        addTotal()
     }
 }

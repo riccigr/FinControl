@@ -10,6 +10,4 @@ fun BigDecimal.formatToBrazillianCurrency() : String {
     return brazillianFormat.format(this)
             .replace("R$", "R$ ")
             .replace("-R$", "R$ -")
-
-
 }

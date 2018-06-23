@@ -7,6 +7,7 @@ import br.com.riccimac.fincontrol.R
 import br.com.riccimac.fincontrol.delegate.ITransactionDelegate
 import br.com.riccimac.fincontrol.dialog.AddTransactionDialog
 import br.com.riccimac.fincontrol.model.Transaction
+import br.com.riccimac.fincontrol.model.Type
 import br.com.riccimac.fincontrol.ui.adapter.TransactionListAdapter
 import br.com.riccimac.fincontrol.ui.view.SummaryView
 import kotlinx.android.synthetic.main.activity_transaction_list.*
@@ -20,24 +21,9 @@ class TransactionListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_transaction_list)
 
         setupSummaryView()
-        setupList()
+        setupListViewAdapter()
+        setupFloatButton()
 
-        this.list_transaction_add_income.setOnClickListener {
-            AddTransactionDialog(this, window.decorView as ViewGroup)
-                    .configureDialog(object : ITransactionDelegate{
-                        override fun delegate(transaction: Transaction) {
-                            updateTransactionList(transaction)
-                            list_transaction_add_menu.close(true)
-                        }
-                    })
-        }
-
-    }
-
-    private fun updateTransactionList(transaction: Transaction) {
-        transactions.add(transaction)
-        setupList()
-        setupSummaryView()
     }
 
     private fun setupSummaryView() {
@@ -47,7 +33,35 @@ class TransactionListActivity : AppCompatActivity() {
         summaryView.update()
     }
 
-    private fun setupList() {
+    private fun setupListViewAdapter() {
         list_transaction_listview.adapter = TransactionListAdapter(transactions, this)
+    }
+
+    private fun setupFloatButton() {
+        list_transaction_add_income.setOnClickListener {
+            configureAddButton(Type.INCOME)
+        }
+
+        list_transaction_add_outcome.setOnClickListener {
+            configureAddButton(Type.OUTCOME)
+        }
+    }
+
+    private fun configureAddButton(type: Type) {
+        AddTransactionDialog(this, window.decorView as ViewGroup)
+                .configure(type, object : ITransactionDelegate {
+                    override fun delegate(transaction: Transaction) {
+
+                        updateTransactionList(transaction)
+                        list_transaction_add_menu.close(true)
+
+                    }
+                })
+    }
+
+    private fun updateTransactionList(transaction: Transaction) {
+        transactions.add(transaction)
+        setupListViewAdapter()
+        setupSummaryView()
     }
 }
