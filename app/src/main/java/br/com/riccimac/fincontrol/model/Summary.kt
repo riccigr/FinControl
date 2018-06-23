@@ -4,31 +4,17 @@ import java.math.BigDecimal
 
 class Summary(private val transactions: List<Transaction>) {
 
-    fun income(): BigDecimal {
-        var totalIncome = BigDecimal.ZERO
+    val income get() = sumBy(Type.INCOME)
 
-        for (transaction in transactions) {
-            if (transaction.type == Type.INCOME) {
-                totalIncome = totalIncome.plus(transaction.value)
-            }
-        }
+    val outcome get() = sumBy(Type.OUTCOME)
 
-        return totalIncome
-    }
+    val total: BigDecimal get() = income.subtract(outcome)
 
-    fun outcome() : BigDecimal {
-        var totalOutcome = BigDecimal.ZERO
+    private fun sumBy(type: Type): BigDecimal {
+        val sum = transactions
+                .filter { it.type == type }
+                .sumByDouble { it.value.toDouble() }
 
-        for (transaction in transactions) {
-            if (transaction.type == Type.OUTCOME) {
-                totalOutcome = totalOutcome.plus(transaction.value)
-            }
-        }
-
-        return totalOutcome
-    }
-
-    fun total() : BigDecimal{
-        return income().subtract(outcome())
+        return BigDecimal(sum)
     }
 }

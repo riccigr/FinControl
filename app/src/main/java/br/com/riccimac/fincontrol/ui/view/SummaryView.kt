@@ -18,8 +18,8 @@ class SummaryView(private val context: Context,
     private val colorIncome : Int = ContextCompat.getColor(context, R.color.income)
     private val colorOutcome : Int = ContextCompat.getColor(context, R.color.outcome)
 
-    fun addIncome() {
-        val totalIncome = summary.income()
+    private fun addIncome() {
+        val totalIncome = summary.income
 
         with(view.summary_card_income){
             text = totalIncome.formatToBrazillianCurrency()
@@ -27,8 +27,8 @@ class SummaryView(private val context: Context,
         }
     }
 
-    fun addOutcome() {
-        val totalOutcome = summary.outcome()
+    private fun addOutcome() {
+        val totalOutcome = summary.outcome
 
         with(view.summary_card_outcome){
             text = totalOutcome.formatToBrazillianCurrency()
@@ -36,8 +36,8 @@ class SummaryView(private val context: Context,
         }
     }
 
-    fun addTotal(){
-        val total = summary.total()
+    private fun addTotal(){
+        val total = summary.total
         val color: Int = colorBy(total)
 
         with(view.summary_card_total){
@@ -54,5 +54,11 @@ class SummaryView(private val context: Context,
         }
 
         return ContextCompat.getColor(context, R.color.outcome)
+    }
+
+    fun update() {
+        addIncome()
+        addOutcome()
+        addTotal()
     }
 }

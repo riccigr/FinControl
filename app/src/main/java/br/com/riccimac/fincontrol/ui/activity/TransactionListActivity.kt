@@ -26,15 +26,13 @@ class TransactionListActivity : AppCompatActivity() {
         val view = window.decorView
         val summaryView = SummaryView( this, view, transactions)
 
-        summaryView.addIncome()
-        summaryView.addOutcome()
-        summaryView.addTotal()
+        summaryView.update()
     }
 
     private fun mockTransactions(): List<Transaction> {
         return listOf(
                 Transaction(value = BigDecimal(20.5), category = "Almoço com a equipe", type = Type.OUTCOME),
-                Transaction(value = BigDecimal(101), type = Type.INCOME),
+                Transaction(value = BigDecimal(1101), type = Type.INCOME),
                 Transaction(value = BigDecimal(400), category = "Passagem", type = Type.OUTCOME),
                 Transaction(value = BigDecimal(50), category = "Presente", type = Type.INCOME)
         )
