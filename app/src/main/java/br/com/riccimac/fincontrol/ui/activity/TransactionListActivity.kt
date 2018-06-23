@@ -22,7 +22,7 @@ class TransactionListActivity : AppCompatActivity() {
 
         setupSummaryView()
         setupListViewAdapter()
-        setupFloatButton()
+        setupFloatingMenu()
 
     }
 
@@ -37,17 +37,17 @@ class TransactionListActivity : AppCompatActivity() {
         list_transaction_listview.adapter = TransactionListAdapter(transactions, this)
     }
 
-    private fun setupFloatButton() {
+    private fun setupFloatingMenu() {
         list_transaction_add_income.setOnClickListener {
-            configureAddButton(Type.INCOME)
+            callDialogTo(Type.INCOME)
         }
 
         list_transaction_add_outcome.setOnClickListener {
-            configureAddButton(Type.OUTCOME)
+            callDialogTo(Type.OUTCOME)
         }
     }
 
-    private fun configureAddButton(type: Type) {
+    private fun callDialogTo(type: Type) {
         AddTransactionDialog(this, window.decorView as ViewGroup)
                 .configure(type, object : ITransactionDelegate {
                     override fun delegate(transaction: Transaction) {
