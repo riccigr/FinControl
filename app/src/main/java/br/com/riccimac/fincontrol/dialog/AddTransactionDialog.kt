@@ -2,7 +2,6 @@ package br.com.riccimac.fincontrol.dialog
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,7 @@ import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import kotlinx.android.synthetic.main.form_transaction.view.*
 import java.math.BigDecimal
-import java.util.*
+import java.util.Calendar
 
 class AddTransactionDialog(private val context: Context,
                            private val viewGroup: ViewGroup) {
@@ -34,24 +33,22 @@ class AddTransactionDialog(private val context: Context,
         AlertDialog.Builder(context)
                 .setTitle(R.string.add_income)
                 .setView(alertView)
-                .setPositiveButton("Adicionar",
-                        DialogInterface.OnClickListener { _ , _ ->
-                            val textValue = alertView.form_transaction_value.text.toString()
-                            val textDate = alertView.form_transaction_date.text.toString()
-                            val textCategory = alertView.form_transaction_category.selectedItem.toString()
+                .setPositiveButton("Adicionar") { _, _ ->
+                    val textValue = alertView.form_transaction_value.text.toString()
+                    val textDate = alertView.form_transaction_date.text.toString()
+                    val textCategory = alertView.form_transaction_category.selectedItem.toString()
 
-                            val value = convertToBigDecimal(textValue)
-                            val date = textDate.parseToCalendar()
+                    val value = convertToBigDecimal(textValue)
+                    val date = textDate.parseToCalendar()
 
-                            val transaction = Transaction(type = Type.INCOME,
-                                    value = value,
-                                    createDate = date,
-                                    category = textCategory)
+                    val transaction = Transaction(type = Type.INCOME,
+                            value = value,
+                            createDate = date,
+                            category = textCategory)
 
-                            ITransactionDelegate.delegate(transaction)
+                    ITransactionDelegate.delegate(transaction)
 
-                        }
-                )
+                }
                 .setNegativeButton("Cancelar", null)
                 .show()
     }
@@ -87,11 +84,10 @@ class AddTransactionDialog(private val context: Context,
     }
 
     private fun createLayout(): View {
-        val view = LayoutInflater.from(context)
+        return LayoutInflater.from(context)
                 .inflate(R.layout.form_transaction,
-                         viewGroup,
+                        viewGroup,
                         false)
-        return view
     }
 
     private fun convertToBigDecimal(textValue: String): BigDecimal {
