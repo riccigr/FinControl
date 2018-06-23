@@ -19,7 +19,7 @@ class TransactionListAdapter(private val transactions: List<Transaction>,
 
     private val LABEL_LENGTH = 14
 
-    override fun getView(position: Int, view: View, parent: ViewGroup): View {
+    override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
         val viewItem = createLayout(parent)
 
         val transaction = transactions[position]
@@ -32,7 +32,7 @@ class TransactionListAdapter(private val transactions: List<Transaction>,
         return viewItem
     }
 
-    private fun createLayout(parent: ViewGroup): View {
+    private fun createLayout(parent: ViewGroup?): View {
         return LayoutInflater
                     .from(context)
                     .inflate(R.layout.transaction_item,

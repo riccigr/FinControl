@@ -1,4 +1,4 @@
-package br.com.riccimac.fincontrol.dialog
+package br.com.riccimac.fincontrol.ui.dialog
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -16,18 +16,18 @@ import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import kotlinx.android.synthetic.main.form_transaction.view.*
 import java.math.BigDecimal
-import java.util.Calendar
+import java.util.*
 
 class AddTransactionDialog(private val context: Context,
                            private val viewGroup: ViewGroup) {
 
     private val view = createLayout()
 
-    private val dateField = view.form_transaction_date
-    private val categoryField = view.form_transaction_category
     private val valueField = view.form_transaction_value
+    private val categoryField = view.form_transaction_category
+    private val createDateField = view.form_transaction_date
 
-    fun configure(type: Type, ITransactionDelegate: ITransactionDelegate) {
+    fun call(type: Type, ITransactionDelegate: ITransactionDelegate) {
         configureCreateDate()
         configureCategory(type)
         configureForm(type, ITransactionDelegate)
@@ -40,14 +40,14 @@ class AddTransactionDialog(private val context: Context,
         val month = today.get(Calendar.MONTH)
         val day = today.get(Calendar.DAY_OF_MONTH)
 
-        dateField.setText(today.formatToBrazillianStandard())
+        createDateField.setText(today.formatToBrazillianStandard())
 
-        dateField.setOnClickListener {
+        createDateField.setOnClickListener {
             DatePickerDialog(context,
                     { _, year, month, day ->
                         val dateSelected = Calendar.getInstance()
                         dateSelected.set(year, month, day)
-                        dateField.setText(dateSelected.formatToBrazillianStandard())
+                        createDateField.setText(dateSelected.formatToBrazillianStandard())
                     },
                     year, month, day
             ).show()
@@ -75,7 +75,7 @@ class AddTransactionDialog(private val context: Context,
                 .setView(view)
                 .setPositiveButton("Adicionar") { _ , _ ->
                     val textValue = valueField.text.toString()
-                    val textDate = dateField.text.toString()
+                    val textDate = createDateField.text.toString()
                     val textCategory = categoryField.selectedItem.toString()
 
                     val value = convertToBigDecimal(textValue)
