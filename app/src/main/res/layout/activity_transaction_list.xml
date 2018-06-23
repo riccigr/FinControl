@@ -10,14 +10,14 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/lista_transacoes_resumo"
+            android:id="@+id/summary_transaction_list"
             layout="@layout/summary_card" />
 
         <ListView
-            android:id="@+id/lista_transacoes_listview"
+            android:id="@+id/list_transaction_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignBottom="@id/lista_transacoes_resumo"
+            android:layout_alignBottom="@id/summary_transaction_list"
             android:layout_alignParentBottom="true"
             android:divider="@null"
             android:dividerHeight="0dp" />
@@ -25,7 +25,7 @@
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/lista_transacoes_adiciona_menu"
+        android:id="@+id/list_transaction_add_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
@@ -44,7 +44,7 @@
 
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lista_transacoes_adiciona_receita"
+            android:id="@+id/list_transaction_add_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_top_right_white_24dp"
@@ -55,7 +55,7 @@
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lista_transacoes_adiciona_despesa"
+            android:id="@+id/list_transaction_add_outcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_bottom_left_white_24dp"

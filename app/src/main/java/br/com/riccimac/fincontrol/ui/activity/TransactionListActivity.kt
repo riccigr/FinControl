@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import br.com.riccimac.fincontrol.R
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
+import br.com.riccimac.fincontrol.ui.SummaryView
 import br.com.riccimac.fincontrol.ui.adapter.TransactionListAdapter
 import kotlinx.android.synthetic.main.activity_transaction_list.*
 import java.math.BigDecimal
@@ -17,7 +18,17 @@ class TransactionListActivity : AppCompatActivity() {
 
         val transactions = mockTransactions()
 
-        configureList(transactions)
+        setupSummaryView(transactions)
+        setupList(transactions)
+    }
+
+    private fun setupSummaryView(transactions: List<Transaction>) {
+        val view = window.decorView
+        val summaryView = SummaryView(view, transactions)
+
+        summaryView.addIncome()
+        summaryView.addOutcome()
+        summaryView.addTotal()
     }
 
     private fun mockTransactions(): List<Transaction> {
@@ -29,7 +40,7 @@ class TransactionListActivity : AppCompatActivity() {
         )
     }
 
-    private fun configureList(transactions: List<Transaction>) {
-        lista_transacoes_listview.adapter = TransactionListAdapter(transactions, this)
+    private fun setupList(transactions: List<Transaction>) {
+        list_transaction_listview.adapter = TransactionListAdapter(transactions, this)
     }
 }
