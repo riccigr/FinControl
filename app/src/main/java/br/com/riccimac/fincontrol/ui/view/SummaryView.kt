@@ -15,31 +15,44 @@ class SummaryView(private val context: Context,
                   transactions: List<Transaction>) {
 
     private val summary : Summary = Summary(transactions)
+    private val colorIncome : Int = ContextCompat.getColor(context, R.color.income)
+    private val colorOutcome : Int = ContextCompat.getColor(context, R.color.outcome)
 
     fun addIncome() {
         val totalIncome = summary.income()
 
-        view.summary_card_income.text = totalIncome.formatToBrazillianCurrency()
-        view.summary_card_income.setTextColor(ContextCompat.getColor(context, R.color.income))
+        with(view.summary_card_income){
+            text = totalIncome.formatToBrazillianCurrency()
+            setTextColor(colorIncome)
+        }
     }
 
     fun addOutcome() {
         val totalOutcome = summary.outcome()
 
-        view.summary_card_outcome.text = totalOutcome.formatToBrazillianCurrency()
-        view.summary_card_outcome.setTextColor(ContextCompat.getColor(context, R.color.outcome))
-
+        with(view.summary_card_outcome){
+            text = totalOutcome.formatToBrazillianCurrency()
+            setTextColor(colorOutcome)
+        }
     }
 
     fun addTotal(){
         val total = summary.total()
+        val color: Int = colorBy(total)
 
-        if(total.compareTo(BigDecimal.ZERO) >= 0){
-            view.summary_card_total.setTextColor(ContextCompat.getColor(context, R.color.income))
-        }else{
-            view.summary_card_total.setTextColor(ContextCompat.getColor(context, R.color.outcome))
+        with(view.summary_card_total){
+            text = total.formatToBrazillianCurrency()
+            setTextColor(color)
         }
 
         view.summary_card_total.text = total.formatToBrazillianCurrency()
+    }
+
+    private fun colorBy(value: BigDecimal): Int {
+        if (value >= BigDecimal.ZERO) {
+           return ContextCompat.getColor(context, R.color.income)
+        }
+
+        return ContextCompat.getColor(context, R.color.outcome)
     }
 }
