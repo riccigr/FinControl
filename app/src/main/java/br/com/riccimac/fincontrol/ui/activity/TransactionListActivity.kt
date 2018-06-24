@@ -2,7 +2,10 @@ package br.com.riccimac.fincontrol.ui.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.AdapterView
 import br.com.riccimac.fincontrol.R
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
@@ -15,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_transaction_list.*
 class TransactionListActivity : AppCompatActivity() {
 
     private val transactions: MutableList<Transaction> = mutableListOf()
+    private val REMOVE_MENU_POSITION = 1
+
     private val viewActivity by lazy {
         window.decorView
     }
@@ -47,8 +52,10 @@ class TransactionListActivity : AppCompatActivity() {
             setOnItemClickListener { _, _, position, _ ->
                 callDialogToUpdate(position)
             }
+            setOnCreateContextMenuListener { menu, _, _ ->
+                menu.add(Menu.NONE, REMOVE_MENU_POSITION, Menu.NONE, "Remover")
+            }
         }
-
     }
 
     private fun setupFloatingMenu() {
@@ -61,7 +68,6 @@ class TransactionListActivity : AppCompatActivity() {
         }
     }
 
-
     private fun callDialogToAdd(type: Type) {
         AddTransactionDialog(this, viewGroupActivity)
                 .call(type, delegate =
@@ -71,11 +77,6 @@ class TransactionListActivity : AppCompatActivity() {
                     }
                 )
 
-    }
-
-    private fun add(transaction: Transaction) {
-        transactions.add(transaction)
-        updateTransactionList()
     }
 
     private fun callDialogToUpdate(position: Int) {
@@ -88,8 +89,30 @@ class TransactionListActivity : AppCompatActivity() {
                 )
     }
 
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        val menuPosition = item?.itemId
+        if(menuPosition == REMOVE_MENU_POSITION){
+            val adapterMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+            val transactionPosition = adapterMenuInfo.position
+            remove(transactionPosition)
+        }
+
+        return super.onContextItemSelected(item)
+    }
+
+    private fun add(transaction: Transaction) {
+        transactions.add(transaction)
+        updateTransactionList()
+    }
+
     private fun update(transaction: Transaction, position: Int) {
         transactions[position] = transaction
+        updateTransactionList()
+    }
+
+    private fun remove(position: Int) {
+        transactions.removeAt(position)
         updateTransactionList()
     }
 
