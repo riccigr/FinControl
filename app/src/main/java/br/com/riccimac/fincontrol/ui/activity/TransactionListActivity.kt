@@ -16,6 +16,13 @@ import kotlinx.android.synthetic.main.activity_transaction_list.*
 class TransactionListActivity : AppCompatActivity() {
 
     private val transactions: MutableList<Transaction> = mutableListOf()
+    private val viewActivity by lazy {
+        window.decorView
+    }
+
+    private val viewGroupActivity by lazy {
+        viewActivity as ViewGroup
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,18 +35,21 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun setupSummaryView() {
-        val view = window.decorView
-        val summaryView = SummaryView(this, view, transactions)
+        val summaryView = SummaryView(this, viewActivity, transactions)
 
         summaryView.update()
     }
 
     private fun setupListViewAdapter() {
-        list_transaction_listview.adapter = TransactionListAdapter(transactions, this)
-        list_transaction_listview.setOnItemClickListener { parent, view, position, id ->
+        val adapterTransaction = TransactionListAdapter(transactions, this)
 
-            callDialogToUpdate(position)
+        with(list_transaction_listview){
+            adapter = adapterTransaction
+            setOnItemClickListener { _, _, position, _ ->
+                callDialogToUpdate(position)
+            }
         }
+
     }
 
     private fun setupFloatingMenu() {
@@ -54,28 +64,36 @@ class TransactionListActivity : AppCompatActivity() {
 
 
     private fun callDialogToAdd(type: Type) {
-        AddTransactionDialog(this, window.decorView as ViewGroup)
+        AddTransactionDialog(this, viewGroupActivity)
                 .call(type, object : ITransactionDelegate {
                     override fun delegate(transaction: Transaction) {
 
-                        transactions.add(transaction)
-                        updateTransactionList()
+                        add(transaction)
                         list_transaction_add_menu.close(true)
 
                     }
                 })
     }
 
+    private fun add(transaction: Transaction) {
+        transactions.add(transaction)
+        updateTransactionList()
+    }
+
     private fun callDialogToUpdate(position: Int) {
         val transaction = transactions[position]
-        UpdateTransactionDialog(this, window.decorView as ViewGroup)
+        UpdateTransactionDialog(this, viewGroupActivity)
                 .call(transaction, object : ITransactionDelegate {
                     override fun delegate(transaction: Transaction) {
-                        transactions[position] = transaction
-                        updateTransactionList()
+                        update(transaction, position)
                     }
 
                 })
+    }
+
+    private fun update(transaction: Transaction, position: Int) {
+        transactions[position] = transaction
+        updateTransactionList()
     }
 
     private fun updateTransactionList() {
