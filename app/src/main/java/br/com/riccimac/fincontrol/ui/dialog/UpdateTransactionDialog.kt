@@ -3,7 +3,6 @@ package br.com.riccimac.fincontrol.ui.dialog
 import android.content.Context
 import android.view.ViewGroup
 import br.com.riccimac.fincontrol.R
-import br.com.riccimac.fincontrol.delegate.ITransactionDelegate
 import br.com.riccimac.fincontrol.extensions.formatToBrazillianStandard
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
@@ -13,10 +12,10 @@ class UpdateTransactionDialog(private val context: Context,
     override val positiveButtonLabel: String
         get() = "Alterar"
 
-    fun call(transaction: Transaction, transactionDelegate: ITransactionDelegate) {
+    fun call(transaction: Transaction, delegate: (transition : Transaction) -> Unit) {
         val type = transaction.type
 
-        super.call(type, transactionDelegate)
+        super.call(type, delegate)
 
         initFields(transaction)
     }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import br.com.riccimac.fincontrol.R
-import br.com.riccimac.fincontrol.delegate.ITransactionDelegate
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import br.com.riccimac.fincontrol.ui.adapter.TransactionListAdapter
@@ -65,14 +64,12 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun callDialogToAdd(type: Type) {
         AddTransactionDialog(this, viewGroupActivity)
-                .call(type, object : ITransactionDelegate {
-                    override fun delegate(transaction: Transaction) {
-
-                        add(transaction)
+                .call(type)
+                    { transactionAdded ->
+                        add(transactionAdded)
                         list_transaction_add_menu.close(true)
-
                     }
-                })
+
     }
 
     private fun add(transaction: Transaction) {
@@ -83,12 +80,10 @@ class TransactionListActivity : AppCompatActivity() {
     private fun callDialogToUpdate(position: Int) {
         val transaction = transactions[position]
         UpdateTransactionDialog(this, viewGroupActivity)
-                .call(transaction, object : ITransactionDelegate {
-                    override fun delegate(transaction: Transaction) {
-                        update(transaction, position)
+                .call(transaction)
+                    { transactionUpdated ->
+                        update(transactionUpdated, position)
                     }
-
-                })
     }
 
     private fun update(transaction: Transaction, position: Int) {

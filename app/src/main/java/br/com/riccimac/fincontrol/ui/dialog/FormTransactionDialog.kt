@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import br.com.riccimac.fincontrol.R
-import br.com.riccimac.fincontrol.delegate.ITransactionDelegate
 import br.com.riccimac.fincontrol.extensions.formatToBrazillianStandard
 import br.com.riccimac.fincontrol.extensions.parseToCalendar
 import br.com.riccimac.fincontrol.model.Transaction
@@ -29,10 +28,10 @@ abstract class FormTransactionDialog(private val context: Context,
 
     protected abstract val positiveButtonLabel : String
 
-    fun call(type: Type, transactionDelegate: ITransactionDelegate) {
+    fun call(type: Type, delegate: (transaction : Transaction) -> Unit) {
         configureCreateDate()
         configureCategory(type)
-        configureForm(type, transactionDelegate)
+        configureForm(type, delegate)
     }
 
     private fun configureCreateDate() {
@@ -68,7 +67,7 @@ abstract class FormTransactionDialog(private val context: Context,
         categoryField.adapter = adapterCategory
     }
 
-    private fun configureForm(type: Type, ITransactionDelegate: ITransactionDelegate) {
+    private fun configureForm(type: Type, delegate: (transaction: Transaction) -> Unit) {
 
         val title = titleBy(type)
 
@@ -88,7 +87,7 @@ abstract class FormTransactionDialog(private val context: Context,
                             createDate = date,
                             category = textCategory)
 
-                    ITransactionDelegate.delegate(transaction)
+                    delegate(transaction)
 
                 }
                 .setNegativeButton("Cancelar", null)
