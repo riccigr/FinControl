@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.AdapterView
 import br.com.riccimac.fincontrol.R
+import br.com.riccimac.fincontrol.dao.TransactionDAO
 import br.com.riccimac.fincontrol.model.Transaction
 import br.com.riccimac.fincontrol.model.Type
 import br.com.riccimac.fincontrol.ui.adapter.TransactionListAdapter
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.activity_transaction_list.*
 
 class TransactionListActivity : AppCompatActivity() {
 
-    private val transactions: MutableList<Transaction> = mutableListOf()
+    private val dao = TransactionDAO()
+    private val transactions = dao.transactions
     private val REMOVE_MENU_POSITION = 1
 
     private val viewActivity by lazy {
@@ -102,17 +104,17 @@ class TransactionListActivity : AppCompatActivity() {
     }
 
     private fun add(transaction: Transaction) {
-        transactions.add(transaction)
+        dao.add(transaction)
         updateTransactionList()
     }
 
     private fun update(transaction: Transaction, position: Int) {
-        transactions[position] = transaction
+        dao.update(transaction, position)
         updateTransactionList()
     }
 
     private fun remove(position: Int) {
-        transactions.removeAt(position)
+        dao.remove(position)
         updateTransactionList()
     }
 
