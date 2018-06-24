@@ -64,11 +64,12 @@ class TransactionListActivity : AppCompatActivity() {
 
     private fun callDialogToAdd(type: Type) {
         AddTransactionDialog(this, viewGroupActivity)
-                .call(type)
+                .call(type, delegate =
                     { transactionAdded ->
                         add(transactionAdded)
                         list_transaction_add_menu.close(true)
                     }
+                )
 
     }
 
@@ -80,10 +81,11 @@ class TransactionListActivity : AppCompatActivity() {
     private fun callDialogToUpdate(position: Int) {
         val transaction = transactions[position]
         UpdateTransactionDialog(this, viewGroupActivity)
-                .call(transaction)
+                .call(transaction, delegate =
                     { transactionUpdated ->
                         update(transactionUpdated, position)
                     }
+                )
     }
 
     private fun update(transaction: Transaction, position: Int) {
